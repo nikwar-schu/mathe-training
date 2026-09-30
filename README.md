@@ -15,13 +15,15 @@ App: https://nikwar-schu.github.io/mathe-training/
 | `js/rechner.js` | Sicherer Auswerter für Eingaben wie `32/3`, `2√3`, `ln(2)` |
 | `js/pruefung.js` | Ergebnis-Hashes und Verschlüsselung der Musterlösungen |
 | `js/zeichenblatt.js` | Rechenblatt (Stift zeichnet, Finger scrollt) |
+| `js/hilfe.js` | Bereinigt den Aufschrieb für den Hilfe-Dialog |
 | `data/heute.json` | Aufgaben des Tages, wird jeden Morgen von einer Claude-Routine erzeugt |
 | `tools/aufgaben-erstellen.mjs` | Macht aus einem Entwurf mit Klartext-Lösungen die `heute.json` |
+| `tools/abschnitt.mjs` | Schneidet den Abschnitt zum Thema aus der Zusammenfassung (Hilfe) |
 
 ## Aufgaben erzeugen
 
 ```bash
-node tools/aufgaben-erstellen.mjs entwurf.json
+node tools/aufgaben-erstellen.mjs entwurf.json --zusammenfassung pfad/zu/zusammenfassung.html
 ```
 
 Entwurfsformat:
@@ -30,6 +32,7 @@ Entwurfsformat:
 {
   "datum": "2026-10-01",
   "thema": "Kettenregel",
+  "anker": "kettenregel",
   "aufgaben": [
     {
       "stufe": "Einstieg",
@@ -45,6 +48,9 @@ Entwurfsformat:
 
 Ergebnisse werden auf zwei Nachkommastellen gerundet verglichen. Das Skript lehnt Werte ab, die
 genau auf einer Rundungsgrenze liegen.
+
+Mit `--zusammenfassung` wird der Abschnitt `anker` (eine `h3`-ID) wörtlich und verschlüsselt als
+Hilfe mitgeliefert. Der ?-Knopf in der App zeigt ihn an; ob er benutzt wurde, wird nicht gemeldet.
 
 ## Hinweis zur Sicherheit
 

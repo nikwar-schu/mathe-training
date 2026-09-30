@@ -15,6 +15,7 @@ import {
   versuchVerbuchen,
 } from "./ablauf.js";
 import { MARKIERUNG_ABGESCHLOSSEN, istGueltigerKanal, sende } from "./benachrichtigung.js";
+import { hilfeInhalt } from "./hilfe.js";
 import { EingabeFehler } from "./rechner.js";
 import { entschluesseln, pruefeEingaben } from "./pruefung.js";
 import { ladeBlatt, ladeZustand, raeumeBlaetterAuf, speichereBlatt, speichereZustand, tagesstand } from "./speicher.js";
@@ -41,9 +42,12 @@ const $ = (auswahl, wurzel = document) => wurzel.querySelector(auswahl);
 function formeln(element) {
   if (typeof window.renderMathInElement !== "function") return;
   window.renderMathInElement(element, {
+    // $…$ kommt aus den Aufgaben, \(…\) und \[…\] aus der Zusammenfassung (Hilfe).
     delimiters: [
       { left: "$$", right: "$$", display: true },
+      { left: "\\[", right: "\\]", display: true },
       { left: "$", right: "$", display: false },
+      { left: "\\(", right: "\\)", display: false },
     ],
     throwOnError: false,
   });
@@ -79,6 +83,25 @@ function zeigeHinweis(text) {
 async function geheimnis() {
   geheimCache ??= await entschluesseln(daten.geheim);
   return geheimCache;
+}
+
+/* ---------- Hilfe ---------- */
+
+async function oeffneHilfe() {
+  const dialog = $("#hilfe");
+  const inhalt = $("#hilfe-inhalt");
+  if (!inhalt.hasChildNodes()) {
+    try {
+      const { titel, html } = await entschluesseln(daten.hilfe);
+      $("#hilfe-titel").textContent = titel;
+      inhalt.replaceChildren(hilfeInhalt(html));
+      formeln(inhalt);
+    } catch {
+      inhalt.textContent = "Der Aufschrieb konnte nicht geladen werden.";
+    }
+  }
+  dialog.showModal();
+  inhalt.scrollTop = 0;
 }
 
 /* ---------- Kopfzeile ---------- */
@@ -194,6 +217,9 @@ function baueKarte(aufgabe, nummer) {
   $(".nummer", karte).textContent = `Aufgabe ${nummer + 1}`;
   $(".stufe", karte).textContent = aufgabe.stufe;
   setzeText($(".aufgabentext", karte), aufgabe.text);
+  const hilfeKnopf = $(".hilfe-knopf", karte);
+  hilfeKnopf.hidden = !daten.hilfe;
+  hilfeKnopf.addEventListener("click", oeffneHilfe);
 
   const felder = $(".felder", karte);
   aufgabe.felder.forEach((bezeichnung, i) => {
@@ -316,6 +342,7 @@ function verbindeEinstellungen() {
   });
 
   $("#erneut-senden").addEventListener("click", pruefeAbschluss);
+  $("#hilfe-schliessen").addEventListener("click", () => $("#hilfe").close());
 }
 
 /** Übernimmt einen Kanal aus einem Einrichtungslink (…/#kanal=…) und entfernt ihn aus der Adresse. */

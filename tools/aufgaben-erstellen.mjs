@@ -2,14 +2,19 @@
  * Wandelt einen Aufgabenentwurf (mit Klartext-Lösungen) in data/heute.json um:
  * Ergebnisse werden gehasht, Thema und Musterlösungen verschlüsselt.
  *
- * Aufruf: node tools/aufgaben-erstellen.mjs <entwurf.json> [ausgabe.json]
+ * Mit --zusammenfassung wird zusätzlich der Abschnitt `anker` aus der Zusammenfassung als
+ * verschlüsselte Hilfe mitgeliefert.
+ *
+ * Aufruf: node tools/aufgaben-erstellen.mjs <entwurf.json> [ausgabe.json] [--zusammenfassung <datei.html>]
  */
 
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { parseArgs } from "node:util";
 
 import { berechne } from "../js/rechner.js";
+import { schneideAbschnitt } from "./abschnitt.mjs";
 import {
   hashErgebnis,
   kanonisch,
@@ -87,18 +92,40 @@ async function oeffentlicheAufgabe(aufgabe, nummer) {
   };
 }
 
+async function leseDatei(pfad, bezeichnung) {
+  try {
+    return await readFile(pfad, "utf8");
+  } catch (fehler) {
+    throw new EntwurfFehler(`${bezeichnung} nicht lesbar (${pfad}): ${fehler.code ?? fehler.message}`);
+  }
+}
+
+/** Der Aufschrieb zum Thema für den Hilfe-Knopf, wörtlich aus der Zusammenfassung übernommen. */
+async function hilfeAbschnitt(zusammenfassungPfad, anker) {
+  const html = await leseDatei(zusammenfassungPfad, "Zusammenfassung");
+  try {
+    return schneideAbschnitt(html, anker);
+  } catch (fehler) {
+    throw new EntwurfFehler(fehler.message);
+  }
+}
+
 async function main() {
-  const [entwurfPfad, ausgabePfad = STANDARD_AUSGABE] = process.argv.slice(2);
+  const { values, positionals } = parseArgs({
+    allowPositionals: true,
+    options: { zusammenfassung: { type: "string" } },
+  });
+  const [entwurfPfad, ausgabePfad = STANDARD_AUSGABE] = positionals;
+  const zusammenfassungPfad = values.zusammenfassung;
   if (!entwurfPfad) {
-    throw new EntwurfFehler("Aufruf: node tools/aufgaben-erstellen.mjs <entwurf.json> [ausgabe.json]");
+    throw new EntwurfFehler(
+      "Aufruf: node tools/aufgaben-erstellen.mjs <entwurf.json> [ausgabe.json] [--zusammenfassung <datei.html>]",
+    );
   }
 
-  let entwurf;
-  try {
-    entwurf = JSON.parse(await readFile(entwurfPfad, "utf8"));
-  } catch (fehler) {
+  const entwurf = await leseDatei(entwurfPfad, "Entwurf").then(JSON.parse).catch((fehler) => {
     throw new EntwurfFehler(`Entwurf nicht lesbar: ${fehler.message}`);
-  }
+  });
   pruefeEntwurf(entwurf);
 
   const teile = await Promise.all(entwurf.aufgaben.map((a, i) => oeffentlicheAufgabe(a, i + 1)));
@@ -110,6 +137,9 @@ async function main() {
       aufgaben: teile.map((teil) => teil.geheim),
     }),
   };
+  if (zusammenfassungPfad) {
+    heute.hilfe = await verschluesseln(await hilfeAbschnitt(zusammenfassungPfad, entwurf.anker));
+  }
 
   await writeFile(ausgabePfad, `${JSON.stringify(heute, null, 2)}\n`, "utf8");
   const gerundet = teile.map((teil) => teil.geheim.gerundet.join(", ")).join(" / ");

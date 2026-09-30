@@ -45,6 +45,7 @@
       <header class="aufgabe-kopf">
         <h2><span class="nummer"></span> <span class="stufe"></span></h2>
         <span class="status"></span>
+        <button type="button" class="hilfe-knopf" aria-label="Hilfe: Aufschrieb zu diesem Thema anzeigen" title="Aufschrieb anzeigen">?</button>
       </header>
       <div class="aufgabentext"></div>
 
@@ -77,6 +78,14 @@
       <section class="loesung" hidden></section>
     </article>
   </template>
+
+  <dialog id="hilfe" class="hilfe-dialog" aria-labelledby="hilfe-titel">
+    <header class="hilfe-kopf">
+      <h2 id="hilfe-titel">Aufschrieb</h2>
+      <button type="button" id="hilfe-schliessen" class="leise">Schließen</button>
+    </header>
+    <div id="hilfe-inhalt" class="hilfe-inhalt"></div>
+  </dialog>
 
   <dialog id="einstellungen">
     <form id="einstellungen-formular" method="dialog">

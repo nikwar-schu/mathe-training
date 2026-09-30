@@ -12,6 +12,13 @@
   --papier: #fffefa;
   --karo: #cfdcec;
   --tinte: #14213d;
+  --buch: #f6efd9;
+  --buch-text: #6b5a2e;
+  --kasten-schritte: #eef3fc;
+  --kasten-beispiel: #eef6ea;
+  --kasten-beispiel-linie: #7aa86b;
+  --kasten-falle: #fbefe6;
+  --kasten-falle-linie: #d0833f;
   --karo-groesse: 20px;
   --radius: 12px;
   --abstand: 16px;
@@ -33,6 +40,13 @@
     --papier: #202124;
     --karo: #33404f;
     --tinte: #e8ecf5;
+    --buch: #3a3322;
+    --buch-text: #e0cd98;
+    --kasten-schritte: #1f2a40;
+    --kasten-beispiel: #1e2b1f;
+    --kasten-beispiel-linie: #6fa35f;
+    --kasten-falle: #33261c;
+    --kasten-falle-linie: #d0833f;
     color-scheme: dark;
   }
 }
@@ -51,6 +65,13 @@
   --papier: #202124;
   --karo: #33404f;
   --tinte: #e8ecf5;
+  --buch: #3a3322;
+  --buch-text: #e0cd98;
+  --kasten-schritte: #1f2a40;
+  --kasten-beispiel: #1e2b1f;
+  --kasten-beispiel-linie: #6fa35f;
+  --kasten-falle: #33261c;
+  --kasten-falle-linie: #d0833f;
   color-scheme: dark;
 }
 
@@ -179,9 +200,23 @@ main {
 
 .aufgabe-kopf {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: 12px;
+}
+
+.aufgabe-kopf h2 {
+  margin-right: auto;
+}
+
+.hilfe-knopf {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-color: var(--rand);
+  background: transparent;
+  color: var(--akzent);
+  font-size: 1.1rem;
 }
 
 .stufe {
@@ -399,6 +434,144 @@ dialog::backdrop {
 dialog form {
   display: grid;
   gap: 10px;
+}
+
+/* Hilfe: Aufschrieb aus der Zusammenfassung, Klassen wie dort */
+
+.hilfe-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  overflow: hidden;
+}
+
+.hilfe-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.hilfe-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rand);
+}
+
+.hilfe-inhalt {
+  overflow-y: auto;
+  padding: 8px 20px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hilfe-inhalt h4 {
+  margin: 18px 0 4px;
+}
+
+.hilfe-inhalt .book {
+  display: inline-block;
+  margin: 8px 0;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--buch-text);
+  background: var(--buch);
+}
+
+.hilfe-inhalt .needs {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--text-leise);
+}
+
+.hilfe-inhalt .verweis {
+  font-weight: 600;
+}
+
+.hilfe-inhalt .box {
+  margin: 10px 0;
+  padding: 8px 14px;
+  border-left: 4px solid;
+  border-radius: 0 6px 6px 0;
+}
+
+.hilfe-inhalt .box > :first-child {
+  margin-top: 0;
+}
+
+.hilfe-inhalt .box > :last-child {
+  margin-bottom: 0;
+}
+
+.hilfe-inhalt .box-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.hilfe-inhalt .box-title .katex {
+  text-transform: none;
+}
+
+.hilfe-inhalt .steps {
+  background: var(--kasten-schritte);
+  border-color: var(--akzent);
+}
+
+.hilfe-inhalt .example {
+  background: var(--kasten-beispiel);
+  border-color: var(--kasten-beispiel-linie);
+}
+
+.hilfe-inhalt .pitfall {
+  background: var(--kasten-falle);
+  border-color: var(--kasten-falle-linie);
+}
+
+.hilfe-inhalt .rule {
+  margin: 10px 0;
+  padding: 4px 14px;
+  border: 2px solid var(--akzent);
+  border-radius: 6px;
+}
+
+.hilfe-inhalt ol,
+.hilfe-inhalt ul {
+  padding-left: 22px;
+}
+
+.hilfe-inhalt table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 8px 0;
+}
+
+.hilfe-inhalt th,
+.hilfe-inhalt td {
+  padding: 4px 10px;
+  border: 1px solid var(--rand);
+  text-align: left;
+  vertical-align: top;
+}
+
+.hilfe-inhalt th {
+  background: var(--leise-flaeche);
+}
+
+.hilfe-inhalt svg,
+.hilfe-inhalt img {
+  max-width: 100%;
+  height: auto;
+}
+
+.hilfe-inhalt .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
 }
 
 @media (max-width: 480px) {

@@ -31,8 +31,15 @@ export function istTagAbgeschlossen(tag) {
   return tag.aufgaben.every(istErledigt);
 }
 
+function sicherstellenOffen(aufgabe) {
+  if (istErledigt(aufgabe)) {
+    throw new Error("Diese Aufgabe ist schon erledigt.");
+  }
+}
+
 /** Wertet einen Prüfversuch aus und aktualisiert die Aufgabe. */
 export function versuchVerbuchen(aufgabe, richtig) {
+  sicherstellenOffen(aufgabe);
   aufgabe.versuche += 1;
   if (richtig) {
     aufgabe.status = STATUS.richtig;
@@ -43,6 +50,7 @@ export function versuchVerbuchen(aufgabe, richtig) {
 }
 
 export function ueberspringen(aufgabe, grund) {
+  sicherstellenOffen(aufgabe);
   const bereinigt = grund.trim();
   if (bereinigt.length < MIN_GRUND_LAENGE) {
     throw new Error(`Bitte schreib einen richtigen Grund (mindestens ${MIN_GRUND_LAENGE} Zeichen).`);

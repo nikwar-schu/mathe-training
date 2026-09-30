@@ -34,6 +34,7 @@ const heute = heutigesDatum();
 let daten = null;
 let tag = null;
 let geheimCache = null;
+let laufenderAbschluss = null;
 
 const $ = (auswahl, wurzel = document) => wurzel.querySelector(auswahl);
 
@@ -144,7 +145,13 @@ async function pruefen(karte, nummer, ereignis) {
     return;
   }
 
-  const status = versuchVerbuchen(tag.aufgaben[nummer], richtig);
+  let status;
+  try {
+    status = versuchVerbuchen(tag.aufgaben[nummer], richtig);
+  } catch {
+    // Doppeltipp auf „Prüfen“: die Aufgabe wurde schon vom ersten Tipp abgeschlossen.
+    return;
+  }
   speichern();
   meldung.dataset.art = richtig ? "richtig" : "fehler";
   if (richtig) {
@@ -246,7 +253,15 @@ async function meldeAbschluss() {
   bereich.hidden = false;
 }
 
-async function pruefeAbschluss() {
+/** Nur ein Abschluss gleichzeitig, damit ein Doppeltipp keine zweite Nachricht auslöst. */
+function pruefeAbschluss() {
+  laufenderAbschluss ??= abschliessen().finally(() => {
+    laufenderAbschluss = null;
+  });
+  return laufenderAbschluss;
+}
+
+async function abschliessen() {
   aktualisiereKopf();
   if (!istTagAbgeschlossen(tag)) return;
   if (tag.gemeldet) {
@@ -300,7 +315,7 @@ function verbindeEinstellungen() {
     speichern();
   });
 
-  $("#erneut-senden").addEventListener("click", meldeAbschluss);
+  $("#erneut-senden").addEventListener("click", pruefeAbschluss);
 }
 
 /** Übernimmt einen Kanal aus einem Einrichtungslink (…/#kanal=…) und entfernt ihn aus der Adresse. */

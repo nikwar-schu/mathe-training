@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mathe-Training</title>
+  <meta name="description" content="Zwei Mathe-Aufgaben pro Tag zur Abi-Vorbereitung">
+  <meta name="theme-color" content="#f7f6f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1c1e" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mathe">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="kopf">
+    <div>
+      <h1>Mathe-Training</h1>
+      <p class="unterzeile"><span id="datum"></span> <span id="serie" class="serie"></span></p>
+    </div>
+    <button type="button" id="einstellungen-oeffnen" class="leise">Einstellungen</button>
+  </header>
+
+  <main>
+    <p id="hinweis" class="hinweis" role="status" hidden></p>
+    <div id="aufgaben" class="aufgaben"></div>
+
+    <section id="abschluss" class="abschluss" hidden>
+      <h2>Geschafft</h2>
+      <p id="thema"></p>
+      <p id="abschluss-status" role="status"></p>
+      <button type="button" id="erneut-senden" hidden>Nachricht erneut senden</button>
+    </section>
+  </main>
+
+  <template id="vorlage-aufgabe">
+    <article class="aufgabe" data-status="offen">
+      <header class="aufgabe-kopf">
+        <h2><span class="nummer"></span> <span class="stufe"></span></h2>
+        <span class="status"></span>
+      </header>
+      <div class="aufgabentext"></div>
+
+      <div class="blatt"></div>
+
+      <form class="antwort" novalidate>
+        <div class="felder"></div>
+        <p class="eingabe-hilfe">Exakt (z. B. <code>32/3</code>, <code>2√3</code>, <code>ln(2)</code>, <code>e^2</code>) oder auf zwei Nachkommastellen gerundet.</p>
+        <div class="zeile">
+          <button type="submit">Prüfen</button>
+          <span class="versuche"></span>
+        </div>
+        <p class="meldung" role="status"></p>
+      </form>
+
+      <div class="ueberspringen">
+        <button type="button" class="ueberspringen-start leise">Aufgabe überspringen</button>
+        <form hidden>
+          <label>Warum überspringst du? Papa bekommt den Grund mitgeteilt.
+            <textarea rows="2" maxlength="300" required></textarea>
+          </label>
+          <p class="grund-meldung" role="status"></p>
+          <div class="zeile">
+            <button type="submit">Überspringen</button>
+            <button type="button" class="abbrechen leise">Abbrechen</button>
+          </div>
+        </form>
+      </div>
+
+      <section class="loesung" hidden></section>
+    </article>
+  </template>
+
+  <dialog id="einstellungen">
+    <form id="einstellungen-formular" method="dialog">
+      <h2>Einstellungen</h2>
+      <label for="kanal">ntfy-Kanal (steht in der Einrichtungsanleitung)</label>
+      <input id="kanal" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p id="einstellungen-meldung" class="meldung" role="status"></p>
+      <div class="zeile">
+        <button type="submit">Speichern</button>
+        <button type="button" id="test-senden" class="leise">Testnachricht senden</button>
+        <button type="button" id="einstellungen-schliessen" class="leise">Schließen</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

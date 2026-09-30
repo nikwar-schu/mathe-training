@@ -1,0 +1,32 @@
+{
+  "datum": "2026-09-30",
+  "aufgaben": [
+    {
+      "stufe": "Einstieg",
+      "text": "Gegeben ist $f(x) = x^2 - 3x$.\nDie Tangente an den Graphen von $f$ im Punkt $P(2 \\mid f(2))$ hat die Gleichung $t(x) = mx + b$. Bestimme $m$ und $b$.",
+      "felder": [
+        "m",
+        "b"
+      ],
+      "ungeordnet": false,
+      "salz": "444617d278c211dd33a209e7a69ee01b",
+      "hash": "9285a5da92c1159f19dfe3ff1c2bf9983fb680192d50ef84486b42f87be1e4be"
+    },
+    {
+      "stufe": "Mittel",
+      "text": "Gegeben ist $f(x) = x^3 - 3x$.\nAn zwei Stellen verläuft die Tangente an den Graphen von $f$ parallel zur Geraden $g(x) = 9x + 1$. Bestimme beide Stellen und den $y$-Achsenabschnitt $b$ der Tangente an der größeren Stelle.",
+      "felder": [
+        "x_{\\text{klein}}",
+        "x_{\\text{groß}}",
+        "b"
+      ],
+      "ungeordnet": false,
+      "salz": "6ed9b7a9601ce6869d113cd8b9881a57",
+      "hash": "ceb1dcfc0d0b6ee784f219ff7e51ffbafee51b122673ed164579dcb3f95f4bac"
+    }
+  ],
+  "geheim": {
+    "iv": "cutCcsDQo63PFrVU",
+    "daten": "+qAbpfjjGl4hXsHFd0TDp/1uBbVgIBpEQUTGgbGBWsZDRqbyRQsYLMyMAO2a82leHDrQs29Sxdw23YRLkzXJV8ocdL24yQnDY8aFuZJlOlIYXybPtVMFEEDo6FGx4Wqhtxc477t6qcw97YjK6hSrh1m1Cq9GNFnCaPnAXBsHle7cP064c1hTs6wL2jkLxVCoGe1lDCxqW1JQm7jua3x9h4+SasMYb34l0v4SRG9cM6hXtAdTvAJXYhLSgvgzQOMSvhQRHaLFIe+CwlT+Vx29KYmzgqjotLoylh6de1ex+o0pqUKLVZSRS4I7FSWoeLilizOJeK0tYqSeRcwd9xjsycflzmp8KKJeLSIUcGFW47vR+97GUResI7ApgvBMVlHRr1eKXG60uRbIExu+0yJyvAmc+cHDJ7Q2TefdwKuvtXGtGiQVDYveXxTdqImuxUi48y7MLAcuQvCTVeIZGquXcXo4976r/QSNZRgyPzdvqUemA9kRyjJomcW5tC7ao3LQtCZjSmjp7woBEN/bZl0CeyHVGaxn7v5x3kuypk3etGrK5cbQx0SXMxQQ9wpxymtT5bVUNtiXSeIudm9X0JaPDHtqhil1s5o2sgrsIntUTsMjl+FDyouI8CJA+pxBKxqHNDywxP/R3m/UfUztd7E4tgdErZH97TbaneCyXRaF3pFYN70MCzGIhWdRZb19Xb+06jGKS1EAmm8R49mWF6QGb9lS67Rnp9+ERzfTwIgSR9/VeZAk9qLAHXhf4xl4A/Qvfa17Q0RMcJ2QK9A+9LIxAJnjgwE6Ajm8ILhSPffjyf53GQyOz6g0Fuw4CHPcETZeLjNbwviYlNHQKgYJYzNbxlh6KKgJoCqJYuBfbk+Kwe6xil639YHkTCADRTZ7GEH/gt05oFm+ZyYXTAoAEdVIPZ4Zbg+PU3kASP5hfaQnkhk="
+  }
+}

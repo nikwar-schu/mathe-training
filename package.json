@@ -1,0 +1,10 @@
+{
+  "name": "mathe-training",
+  "private": true,
+  "type": "module",
+  "description": "Tägliches Mathe-Abi-Training: Web-App mit Rechenblatt und Ergebnisprüfung",
+  "scripts": {
+    "test": "node --test tools/*.test.mjs",
+    "aufgaben": "node tools/aufgaben-erstellen.mjs"
+  }
+}

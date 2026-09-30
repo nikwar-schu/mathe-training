@@ -1,0 +1,409 @@
+:root {
+  --hintergrund: #f7f6f2;
+  --flaeche: #ffffff;
+  --text: #1d1d1f;
+  --text-leise: #6b6b70;
+  --rand: #dcdad3;
+  --akzent: #2f5fd0;
+  --akzent-text: #ffffff;
+  --richtig: #1f7a45;
+  --falsch: #b3261e;
+  --leise-flaeche: #eeede7;
+  --papier: #fffefa;
+  --karo: #cfdcec;
+  --tinte: #14213d;
+  --karo-groesse: 20px;
+  --radius: 12px;
+  --abstand: 16px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --hintergrund: #1b1c1e;
+    --flaeche: #242528;
+    --text: #ececef;
+    --text-leise: #a0a0a8;
+    --rand: #3a3b40;
+    --akzent: #7aa2ff;
+    --akzent-text: #0d1330;
+    --richtig: #62c98c;
+    --falsch: #ff8a80;
+    --leise-flaeche: #2e2f33;
+    --papier: #202124;
+    --karo: #33404f;
+    --tinte: #e8ecf5;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --hintergrund: #1b1c1e;
+  --flaeche: #242528;
+  --text: #ececef;
+  --text-leise: #a0a0a8;
+  --rand: #3a3b40;
+  --akzent: #7aa2ff;
+  --akzent-text: #0d1330;
+  --richtig: #62c98c;
+  --falsch: #ff8a80;
+  --leise-flaeche: #2e2f33;
+  --papier: #202124;
+  --karo: #33404f;
+  --tinte: #e8ecf5;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--hintergrund);
+  color: var(--text);
+  font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 1.35rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: 1px solid var(--akzent);
+  border-radius: 999px;
+  background: var(--akzent);
+  color: var(--akzent-text);
+  cursor: pointer;
+}
+
+button.leise {
+  background: transparent;
+  color: var(--akzent);
+  border-color: var(--rand);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+input,
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+  background: var(--flaeche);
+  color: var(--text);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--akzent) 45%, transparent);
+  outline-offset: 2px;
+}
+
+code {
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--leise-flaeche);
+}
+
+.kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--abstand);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 20px) var(--abstand) 8px;
+}
+
+.unterzeile {
+  margin: 2px 0 0;
+  color: var(--text-leise);
+}
+
+.serie:not(:empty)::before {
+  content: "· ";
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px var(--abstand) calc(env(safe-area-inset-bottom) + 48px);
+}
+
+.hinweis {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--leise-flaeche);
+}
+
+.aufgaben {
+  display: grid;
+  gap: 28px;
+}
+
+.aufgabe,
+.abschluss {
+  padding: 20px;
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  background: var(--flaeche);
+}
+
+.aufgabe-kopf {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stufe {
+  font-weight: 400;
+  color: var(--text-leise);
+}
+
+.stufe::before {
+  content: "· ";
+}
+
+.status {
+  font-weight: 600;
+}
+
+.aufgabe[data-status="richtig"] .status {
+  color: var(--richtig);
+}
+
+.aufgabe[data-status="falsch"] .status,
+.aufgabe[data-status="uebersprungen"] .status {
+  color: var(--falsch);
+}
+
+.aufgabentext {
+  margin: 8px 0 16px;
+}
+
+.aufgabentext p,
+.loesung p {
+  margin: 0 0 8px;
+}
+
+.katex {
+  font-size: 1.08em;
+}
+
+/* Rechenblatt */
+
+.werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.werkzeuge button {
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--text);
+  border-color: var(--rand);
+  font-weight: 500;
+}
+
+.werkzeuge button[aria-pressed="true"] {
+  background: var(--akzent);
+  border-color: var(--akzent);
+  color: var(--akzent-text);
+}
+
+.finger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-leise);
+  font-size: 0.9rem;
+}
+
+.finger input {
+  width: auto;
+}
+
+.karopapier {
+  position: relative;
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--papier);
+  background-image:
+    linear-gradient(var(--karo) 1px, transparent 1px),
+    linear-gradient(90deg, var(--karo) 1px, transparent 1px);
+  background-size: var(--karo-groesse) var(--karo-groesse);
+  background-position: -1px -1px;
+}
+
+.karopapier canvas {
+  display: block;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.karopapier.finger-aktiv canvas {
+  touch-action: none;
+}
+
+.verlaengern {
+  display: block;
+  margin: 8px auto 0;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--text-leise);
+  border-color: var(--rand);
+  font-weight: 500;
+}
+
+/* Antwort */
+
+.antwort {
+  margin-top: 20px;
+}
+
+.felder {
+  display: grid;
+  gap: 10px;
+}
+
+.felder label {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, auto) 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.eingabe-hilfe {
+  margin: 8px 0 12px;
+  font-size: 0.85rem;
+  color: var(--text-leise);
+}
+
+.zeile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.versuche {
+  color: var(--text-leise);
+  font-size: 0.9rem;
+}
+
+.meldung {
+  min-height: 1.5em;
+  margin: 10px 0 0;
+}
+
+.meldung[data-art="richtig"] {
+  color: var(--richtig);
+  font-weight: 600;
+}
+
+.meldung[data-art="fehler"],
+.grund-meldung {
+  color: var(--falsch);
+}
+
+.ueberspringen {
+  margin-top: 12px;
+}
+
+.ueberspringen form {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ueberspringen label {
+  display: grid;
+  gap: 6px;
+}
+
+.grund-meldung {
+  margin: 0;
+}
+
+.loesung {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rand);
+}
+
+.loesung ol {
+  margin: 0 0 8px;
+  padding-left: 1.3rem;
+}
+
+.ergebnis {
+  font-weight: 600;
+}
+
+.abschluss {
+  margin-top: 28px;
+}
+
+.abschluss p {
+  margin: 8px 0 0;
+}
+
+dialog {
+  width: min(520px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid var(--rand);
+  border-radius: var(--radius);
+  background: var(--flaeche);
+  color: var(--text);
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+dialog form {
+  display: grid;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .aufgabe,
+  .abschluss {
+    padding: 14px;
+  }
+}

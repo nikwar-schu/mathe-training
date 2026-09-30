@@ -14,7 +14,8 @@ App: https://nikwar-schu.github.io/mathe-training/
 | `js/ablauf.js` | Regeln: Versuche, Abschluss, Serie, Nachrichtentext |
 | `js/rechner.js` | Sicherer Auswerter für Eingaben wie `32/3`, `2√3`, `ln(2)` |
 | `js/pruefung.js` | Ergebnis-Hashes und Verschlüsselung der Musterlösungen |
-| `js/zeichenblatt.js` | Rechenblatt (Stift zeichnet, Finger scrollt) |
+| `js/zeichenblatt.js` | Rechenblatt (Stift zeichnet, Finger scrollt, Werkzeugleiste bleibt oben stehen) |
+| `js/zweifingertipp.js` | Zwei-Finger-Tipp wechselt Stift und Radierer (Pencil-Gesten erreichen Webseiten nicht) |
 | `js/hilfe.js` | Bereinigt den Aufschrieb für den Hilfe-Dialog |
 | `data/heute.json` | Aufgaben des Tages, wird jeden Morgen von einer Claude-Routine erzeugt |
 | `tools/aufgaben-erstellen.mjs` | Macht aus einem Entwurf mit Klartext-Lösungen die `heute.json` |

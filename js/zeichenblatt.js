@@ -2,8 +2,11 @@
  * Kariertes Rechenblatt für Apple Pencil, Maus und (optional) Finger.
  *
  * Striche werden als Punktlisten gespeichert und bei jeder Größenänderung neu gezeichnet. Der Stift
- * zeichnet, der Finger scrollt die Seite; so kann man mit aufgelegter Hand schreiben.
+ * zeichnet, der Finger scrollt die Seite; so kann man mit aufgelegter Hand schreiben. Ein kurzer
+ * Tipp mit zwei Fingern wechselt zwischen Stift und Radierer.
  */
+
+import { ZweiFingerTipp } from "./zweifingertipp.js";
 
 const STARTHOEHE = 1100;
 const VERLAENGERUNG = 700;
@@ -28,6 +31,7 @@ export class Zeichenblatt {
     this.werkzeug = "stift";
     this.fingerZeichnet = false;
     this.aktiverStrich = null;
+    this.fingerAufBlatt = new Set();
 
     this.baueOberflaeche(behaelter);
     this.verbindeEreignisse();
@@ -61,17 +65,37 @@ export class Zeichenblatt {
       this.melden();
     });
 
-    leiste.addEventListener("click", (ereignis) => this.werkzeugKlick(ereignis, leiste));
+    this.hinweis = document.createElement("div");
+    this.hinweis.className = "werkzeug-hinweis";
+    this.hinweis.setAttribute("role", "status");
+    this.flaeche.append(this.hinweis);
+
+    this.leiste = leiste;
+    leiste.addEventListener("click", (ereignis) => this.werkzeugKlick(ereignis));
     behaelter.append(leiste, this.flaeche, verlaengern);
   }
 
-  werkzeugKlick(ereignis, leiste) {
+  setzeWerkzeug(werkzeug) {
+    this.werkzeug = werkzeug;
+    this.leiste.querySelectorAll("[data-werkzeug]").forEach((knopf) => {
+      knopf.setAttribute("aria-pressed", String(knopf.dataset.werkzeug === werkzeug));
+    });
+  }
+
+  /** Zwei-Finger-Tipp: Stift und Radierer tauschen, mit kurzer Einblendung zur Bestätigung. */
+  wechsleWerkzeug() {
+    this.setzeWerkzeug(this.werkzeug === "stift" ? "radierer" : "stift");
+    this.hinweis.textContent = this.werkzeug === "stift" ? "Stift" : "Radierer";
+    this.hinweis.classList.remove("sichtbar");
+    // Reflow erzwingen, damit die Einblendung auch bei schnellem Doppelwechsel neu startet.
+    void this.hinweis.offsetWidth;
+    this.hinweis.classList.add("sichtbar");
+  }
+
+  werkzeugKlick(ereignis) {
     const ziel = ereignis.target;
     if (ziel.dataset.werkzeug) {
-      this.werkzeug = ziel.dataset.werkzeug;
-      leiste.querySelectorAll("[data-werkzeug]").forEach((knopf) => {
-        knopf.setAttribute("aria-pressed", String(knopf === ziel));
-      });
+      this.setzeWerkzeug(ziel.dataset.werkzeug);
     } else if (ziel.dataset.aktion === "rueckgaengig") {
       this.striche.pop();
       this.zeichneAlles();
@@ -103,8 +127,18 @@ export class Zeichenblatt {
 
     this.leinwand.addEventListener("pointerdown", (ereignis) => this.beginneStrich(ereignis));
     this.leinwand.addEventListener("pointermove", (ereignis) => this.setzeStrichFort(ereignis));
-    this.leinwand.addEventListener("pointerup", () => this.beendeStrich());
-    this.leinwand.addEventListener("pointercancel", () => this.beendeStrich());
+    this.leinwand.addEventListener("pointerup", (ereignis) => this.beendeStrich(ereignis));
+    this.leinwand.addEventListener("pointercancel", (ereignis) => this.beendeStrich(ereignis));
+
+    new ZweiFingerTipp(this.leinwand, () => this.wechsleWerkzeug());
+  }
+
+  /** Beim Zeichnen mit dem Finger: Kommt ein zweiter Finger dazu, war der erste kein Strich. */
+  verwerfeFingerStrich() {
+    if (this.aktiverStrich?.zeiger !== "touch") return;
+    this.striche.pop();
+    this.aktiverStrich = null;
+    this.zeichneAlles();
   }
 
   punktAus(ereignis) {
@@ -118,9 +152,16 @@ export class Zeichenblatt {
   }
 
   beginneStrich(ereignis) {
+    if (ereignis.pointerType === "touch") this.fingerAufBlatt.add(ereignis.pointerId);
+    if (this.fingerAufBlatt.size > 1) {
+      this.verwerfeFingerStrich();
+      return;
+    }
     if (!this.darfZeichnen(ereignis.pointerType) || ereignis.button > 0) return;
     this.leinwand.setPointerCapture(ereignis.pointerId);
     this.aktiverStrich = { werkzeug: this.werkzeug, punkte: [this.punktAus(ereignis)] };
+    // Nicht aufzählbar, damit der Zeigertyp nicht mit ins gespeicherte JSON wandert.
+    Object.defineProperty(this.aktiverStrich, "zeiger", { value: ereignis.pointerType, enumerable: false });
     this.striche.push(this.aktiverStrich);
     this.zeichneStrich(this.aktiverStrich, 0);
   }
@@ -133,7 +174,8 @@ export class Zeichenblatt {
     this.zeichneStrich(this.aktiverStrich, start);
   }
 
-  beendeStrich() {
+  beendeStrich(ereignis) {
+    this.fingerAufBlatt.delete(ereignis.pointerId);
     if (!this.aktiverStrich) return;
     this.aktiverStrich = null;
     this.melden();

@@ -185,8 +185,10 @@ main {
   background: var(--leise-flaeche);
 }
 
+/* minmax(0, …): sonst hält die Leinwand die alte Breite fest, wenn das iPad ins Hochformat dreht. */
 .aufgaben {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 28px;
 }
 
@@ -256,12 +258,55 @@ main {
 
 /* Rechenblatt */
 
+/* Bleibt beim Scrollen durchs Blatt oben stehen, damit Stift und Radierer immer erreichbar sind. */
 .werkzeuge {
+  position: sticky;
+  top: env(safe-area-inset-top);
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin: 0 -8px 8px;
+  padding: 8px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--flaeche) 92%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Kurze Bestätigung nach dem Zwei-Finger-Tipp, mittig im Bildschirm. */
+.werkzeug-hinweis {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--hintergrund);
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.werkzeug-hinweis:empty {
+  display: none;
+}
+
+.werkzeug-hinweis.sichtbar {
+  animation: werkzeug-einblenden 900ms ease-out;
+}
+
+@keyframes werkzeug-einblenden {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .werkzeuge button {

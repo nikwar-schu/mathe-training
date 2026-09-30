@@ -440,6 +440,17 @@ main {
   margin: 0;
 }
 
+.offen-hinweis:not(:empty) {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--leise-flaeche);
+}
+
+.offen-hinweis:empty {
+  display: none;
+}
+
 .loesung {
   margin-top: 20px;
   padding-top: 16px;

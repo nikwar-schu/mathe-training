@@ -287,8 +287,21 @@ function pruefeAbschluss() {
   return laufenderAbschluss;
 }
 
+/** Macht an erledigten Karten sichtbar, dass die Nachricht erst nach allen Aufgaben rausgeht. */
+function aktualisiereOffeneHinweise() {
+  const offen = tag.aufgaben.filter((aufgabe) => !istErledigt(aufgabe)).length;
+  const text =
+    offen === 0
+      ? ""
+      : `Noch ${offen === 1 ? "eine Aufgabe" : `${offen} Aufgaben`} offen. Papa bekommt die Nachricht, sobald alle erledigt sind.`;
+  document.querySelectorAll(".aufgabe").forEach((karte, nummer) => {
+    $(".offen-hinweis", karte).textContent = istErledigt(tag.aufgaben[nummer]) ? text : "";
+  });
+}
+
 async function abschliessen() {
   aktualisiereKopf();
+  aktualisiereOffeneHinweise();
   if (!istTagAbgeschlossen(tag)) return;
   if (tag.gemeldet) {
     const { thema } = await geheimnis();

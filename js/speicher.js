@@ -39,23 +39,38 @@ export function speichereZustand(zustand) {
   return schreibenJson(SCHLUESSEL_ZUSTAND, zustand);
 }
 
-/** Liefert den Fortschritt eines Tages und legt ihn bei Bedarf an. */
-export function tagesstand(zustand, datum, anzahlAufgaben) {
-  if (!zustand.tage[datum]) {
+/**
+ * Liefert den Fortschritt eines Tages und legt ihn bei Bedarf an. Werden am selben Tag neue
+ * Aufgaben erzeugt (anderer `satz`), beginnt der Tag von vorn, samt Rechenblättern.
+ */
+export function tagesstand(zustand, datum, satz, anzahlAufgaben) {
+  if (zustand.tage[datum]?.satz !== satz) {
     zustand.tage[datum] = {
+      satz,
       aufgaben: Array.from({ length: anzahlAufgaben }, () => ({ status: "offen", versuche: 0, grund: "" })),
       gemeldet: false,
     };
+    for (let nummer = 0; nummer < anzahlAufgaben; nummer += 1) {
+      try {
+        localStorage.removeItem(blattSchluessel(datum, nummer));
+      } catch {
+        // Ohne Speicherzugriff gibt es auch keine alten Blätter.
+      }
+    }
   }
   return zustand.tage[datum];
 }
 
+function blattSchluessel(datum, nummer) {
+  return `${PRAEFIX_BLATT}${datum}:${nummer}`;
+}
+
 export function ladeBlatt(datum, nummer) {
-  return lesenJson(`${PRAEFIX_BLATT}${datum}:${nummer}`, null);
+  return lesenJson(blattSchluessel(datum, nummer), null);
 }
 
 export function speichereBlatt(datum, nummer, blatt) {
-  return schreibenJson(`${PRAEFIX_BLATT}${datum}:${nummer}`, blatt);
+  return schreibenJson(blattSchluessel(datum, nummer), blatt);
 }
 
 /** Löscht Rechenblätter älterer Tage, damit der Speicher nicht vollläuft. */

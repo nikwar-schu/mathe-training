@@ -271,7 +271,7 @@ async function meldeAbschluss() {
     await sende(zustand.kanal, { ...nachricht, markierungen: [MARKIERUNG_ABGESCHLOSSEN] });
     tag.gemeldet = true;
     speichern();
-    status.textContent = "Fertig für heute. Papa hat eine Nachricht bekommen.";
+    status.textContent = `Fertig für heute. Die Nachricht an Papa ist raus (Kanal „${zustand.kanal}“).`;
   } catch (fehler) {
     status.textContent = `Die Nachricht ist nicht rausgegangen: ${fehler.message}`;
     knopf.hidden = false;
@@ -337,7 +337,7 @@ function verbindeEinstellungen() {
         titel: "Mathe-Training: Test",
         text: "Wenn du das liest, kommen die Nachrichten von Niklas' Mathe-App bei dir an.",
       });
-      meldung.textContent = "Testnachricht gesendet. Ist sie auf dem Handy angekommen?";
+      meldung.textContent = `Testnachricht an „${kanalAusFeld()}“ gesendet. Ist sie auf dem Handy angekommen?`;
     } catch (fehler) {
       meldung.textContent = fehler.message;
     }
@@ -393,7 +393,8 @@ async function start() {
   }
 
   raeumeBlaetterAuf(heute);
-  tag = tagesstand(zustand, daten.datum, daten.aufgaben.length);
+  // Das Salz der ersten Aufgabe ist pro erzeugtem Aufgabensatz zufällig und dient als Kennung.
+  tag = tagesstand(zustand, daten.datum, daten.aufgaben[0].salz, daten.aufgaben.length);
   speichern();
 
   $("#aufgaben").replaceChildren(...daten.aufgaben.map(baueKarte));

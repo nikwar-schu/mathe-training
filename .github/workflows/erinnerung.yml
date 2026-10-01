@@ -1,0 +1,27 @@
+# Plant nach jedem neuen Aufgabensatz die Mitternachts-Nachricht "nicht erledigt" bei ntfy.
+# Die App loescht sie wieder, sobald Niklas alle Aufgaben erledigt hat.
+name: Erinnerung planen
+
+on:
+  push:
+    branches: [main]
+    paths: [data/heute.json]
+  workflow_dispatch:
+
+concurrency:
+  group: erinnerung
+  cancel-in-progress: false
+
+jobs:
+  planen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Erinnerung bei ntfy planen
+        run: node tools/erinnerung-planen.mjs
+        env:
+          NTFY_KANAL: ${{ secrets.NTFY_KANAL }}

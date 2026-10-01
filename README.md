@@ -20,6 +20,7 @@ App: https://nikwar-schu.github.io/mathe-training/
 | `data/heute.json` | Aufgaben des Tages, wird jeden Morgen von einer Claude-Routine erzeugt |
 | `tools/aufgaben-erstellen.mjs` | Macht aus einem Entwurf mit Klartext-Lösungen die `heute.json` |
 | `tools/abschnitt.mjs` | Schneidet den Abschnitt zum Thema aus der Zusammenfassung (Hilfe) |
+| `tools/erinnerung-planen.mjs`, `.github/workflows/erinnerung.yml` | Plant die Mitternachts-Nachricht „nicht erledigt“ |
 
 ## Aufgaben erzeugen
 
@@ -53,10 +54,21 @@ genau auf einer Rundungsgrenze liegen.
 Mit `--zusammenfassung` wird der Abschnitt `anker` (eine `h3`-ID) wörtlich und verschlüsselt als
 Hilfe mitgeliefert. Der ?-Knopf in der App zeigt ihn an; ob er benutzt wurde, wird nicht gemeldet.
 
+## Mitternachts-Erinnerung
+
+Nach jedem Push von `data/heute.json` plant eine GitHub Action bei ntfy die Nachricht „Niklas hat
+gestern die Aufgaben nicht erledigt.“ für 0 Uhr deutscher Zeit nach dem Aufgabentag (Sommer- und
+Winterzeit berücksichtigt). Die Nachricht trägt die Kennung `fehlt-JJJJ-MM-TT`; ein zweiter Aufgabensatz
+am selben Tag ersetzt sie. Sobald alle Aufgaben erledigt sind, löscht die App sie vor dem Versand der
+Abschlussnachricht.
+
+Die Action braucht das Repository-Secret `NTFY_KANAL`. Von Hand neu planen:
+`gh workflow run erinnerung.yml` (Achtung: plant sie auch dann, wenn der Tag schon erledigt ist).
+
 ## Hinweis zur Sicherheit
 
 Die Verschlüsselung verhindert nur versehentliches Spicken. Der Schlüssel steckt im Code, weil die App
-ohne Server auskommt. Der ntfy-Kanalname steht nicht im Repo, sondern nur auf den Geräten.
+ohne Server auskommt. Der ntfy-Kanalname steht nicht im Repo, sondern nur auf den Geräten und als Repository-Secret.
 
 ## Tests
 

@@ -14,7 +14,7 @@ import {
   ueberspringen,
   versuchVerbuchen,
 } from "./ablauf.js";
-import { MARKIERUNG_ABGESCHLOSSEN, istGueltigerKanal, sende } from "./benachrichtigung.js";
+import { MARKIERUNG_ABGESCHLOSSEN, istGueltigerKanal, loescheErinnerung, sende } from "./benachrichtigung.js";
 import { hilfeInhalt } from "./hilfe.js";
 import { EingabeFehler } from "./rechner.js";
 import { entschluesseln, pruefeEingaben } from "./pruefung.js";
@@ -268,6 +268,8 @@ async function meldeAbschluss() {
       thema,
       serieTage: serie(zustand.tage, heute),
     });
+    // Erst die Mitternachts-Erinnerung löschen: Scheitert das, bietet „erneut senden“ beides noch einmal an.
+    await loescheErinnerung(zustand.kanal, daten.datum);
     await sende(zustand.kanal, { ...nachricht, markierungen: [MARKIERUNG_ABGESCHLOSSEN] });
     tag.gemeldet = true;
     speichern();

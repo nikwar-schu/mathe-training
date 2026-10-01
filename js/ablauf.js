@@ -5,6 +5,7 @@
 
 export const MAX_VERSUCHE = 2;
 export const MIN_GRUND_LAENGE = 10;
+export const ZEITZONE = "Europe/Berlin";
 
 export const STATUS = Object.freeze({
   offen: "offen",
@@ -15,7 +16,35 @@ export const STATUS = Object.freeze({
 
 /** Heutiges Datum in deutscher Zeit als JJJJ-MM-TT. */
 export function heutigesDatum(jetzt = new Date()) {
-  return jetzt.toLocaleDateString("sv-SE", { timeZone: "Europe/Berlin" });
+  return jetzt.toLocaleDateString("sv-SE", { timeZone: ZEITZONE });
+}
+
+/** Abstand der deutschen Ortszeit zu UTC in Millisekunden (1 h im Winter, 2 h im Sommer). */
+function versatzZuUtc(zeitpunkt) {
+  const teile = new Intl.DateTimeFormat("en-US", {
+    timeZone: ZEITZONE,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  }).formatToParts(new Date(zeitpunkt));
+  const wert = (typ) => Number(teile.find((teil) => teil.type === typ).value);
+  const ortszeitAlsUtc = Date.UTC(wert("year"), wert("month") - 1, wert("day"), wert("hour"), wert("minute"), wert("second"));
+  return ortszeitAlsUtc - zeitpunkt;
+}
+
+/**
+ * Unix-Zeit (Sekunden) der Mitternacht deutscher Zeit, mit der `datum` endet.
+ * Die Zeitumstellung liegt immer um 1 Uhr UTC, also nach dieser Mitternacht; deshalb stimmt der
+ * Versatz, der zur selben Mitternacht in UTC gilt.
+ */
+export function mitternachtNach(datum) {
+  const [jahr, monat, tag] = datum.split("-").map(Number);
+  const mitternachtUtc = Date.UTC(jahr, monat - 1, tag + 1);
+  return (mitternachtUtc - versatzZuUtc(mitternachtUtc)) / 1000;
 }
 
 export function kurzesDatum(datum) {
@@ -92,6 +121,14 @@ function zeileFuer(aufgabe, nummer, stufe) {
     default:
       return `${kopf}: noch offen`;
   }
+}
+
+/** Nachricht für Mitternacht, falls die Aufgaben von `datum` bis dahin nicht erledigt sind. */
+export function erinnerungNachricht(datum) {
+  return {
+    titel: `Niklas, Mathe ${kurzesDatum(datum)}: nicht erledigt`,
+    text: "Niklas hat gestern die Aufgaben nicht erledigt.",
+  };
 }
 
 /** Baut die Nachricht an den Vater, sobald alle Aufgaben des Tages erledigt sind. */

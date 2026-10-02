@@ -30,9 +30,19 @@ const DATUM_MUSTER = /^\d{4}-\d{2}-\d{2}$/;
 
 class EntwurfFehler extends Error {}
 
+// Zwei Backslashes vor einem Befehl wie "\," oder "\cdot" heißen: beim Schreiben des JSON einmal zu
+// oft escaped. KaTeX liest "\\" als Zeilenumbruch, und die Aufgabe zerfällt in der App in Zeilen.
+const DOPPELT_ESCAPED = /\\\\(?=[A-Za-z,;:! |{])/;
+
 function pruefeText(wert, bezeichnung) {
   if (typeof wert !== "string" || wert.trim() === "") {
     throw new EntwurfFehler(`${bezeichnung} fehlt oder ist leer.`);
+  }
+  if (DOPPELT_ESCAPED.test(wert)) {
+    throw new EntwurfFehler(
+      `${bezeichnung} enthält zwei Backslashes vor einem LaTeX-Befehl (zu oft escaped). ` +
+        'Im JSON-Entwurf "\\\\," schreiben, nicht "\\\\\\\\,".',
+    );
   }
 }
 

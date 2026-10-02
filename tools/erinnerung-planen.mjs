@@ -18,14 +18,12 @@ import {
   PRIORITAET_HOCH,
   erinnerungsKennung,
   istGueltigerKanal,
+  istPlanbar,
   sende,
 } from "../js/benachrichtigung.js";
 
 const STANDARD_DATEN = fileURLToPath(new URL("../data/heute.json", import.meta.url));
 const DATUM_MUSTER = /^\d{4}-\d{2}-\d{2}$/;
-// ntfy.sh nimmt geplante Nachrichten frühestens 10 Sekunden und höchstens 3 Tage im Voraus an.
-const MIN_VORLAUF_SEKUNDEN = 10;
-const MAX_VORLAUF_SEKUNDEN = 3 * 24 * 60 * 60;
 
 async function main() {
   const kanal = process.env.NTFY_KANAL?.trim() ?? "";
@@ -40,8 +38,7 @@ async function main() {
   }
 
   const zeitpunkt = mitternachtNach(datum);
-  const vorlauf = zeitpunkt - Math.floor(Date.now() / 1000);
-  if (vorlauf < MIN_VORLAUF_SEKUNDEN || vorlauf > MAX_VORLAUF_SEKUNDEN) {
+  if (!istPlanbar(zeitpunkt, Math.floor(Date.now() / 1000))) {
     // Etwa ein nachträglich neu gestarteter Lauf für einen vergangenen Tag: nichts zu planen.
     console.log(`Mitternacht nach ${datum} liegt außerhalb des planbaren Zeitraums, keine Erinnerung geplant.`);
     return;

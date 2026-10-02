@@ -4,6 +4,8 @@
  * Kontingent Fehler wirft; die App funktioniert dann weiter, nur ohne Erinnerung.
  */
 
+import { leereWeckerEinstellung } from "./wecker.js";
+
 const SCHLUESSEL_ZUSTAND = "mathe-training:v1";
 const PRAEFIX_BLATT = "mathe-training:blatt:";
 const BLATT_AUFBEWAHRUNG_TAGE = 3;
@@ -27,12 +29,13 @@ function schreibenJson(schluessel, wert) {
 }
 
 function leererZustand() {
-  return { kanal: "", tage: {} };
+  return { kanal: "", tage: {}, wecker: leereWeckerEinstellung() };
 }
 
 export function ladeZustand() {
   const zustand = lesenJson(SCHLUESSEL_ZUSTAND, leererZustand());
-  return { ...leererZustand(), ...zustand };
+  // Ältere Stände kennen die Wecker-Einstellung noch nicht oder nur teilweise.
+  return { ...leererZustand(), ...zustand, wecker: { ...leereWeckerEinstellung(), ...zustand.wecker } };
 }
 
 export function speichereZustand(zustand) {

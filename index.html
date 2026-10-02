@@ -25,7 +25,15 @@
       <h1>Mathe-Training</h1>
       <p class="unterzeile"><span id="datum"></span> <span id="serie" class="serie"></span></p>
     </div>
-    <button type="button" id="einstellungen-oeffnen" class="leise">Einstellungen</button>
+    <div class="kopf-knoepfe">
+      <button type="button" id="wecker-oeffnen" class="leise glocke" data-zustand="aus" aria-label="Mitteilungen einstellen">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6 9a6 6 0 0 1 12 0c0 6.5 2.5 8 2.5 8h-17S6 15.5 6 9"/>
+          <path d="M10.2 20.5a2 2 0 0 0 3.6 0"/>
+        </svg>
+      </button>
+      <button type="button" id="einstellungen-oeffnen" class="leise">Einstellungen</button>
+    </div>
   </header>
 
   <main>
@@ -87,6 +95,39 @@
       <button type="button" id="hilfe-schliessen" class="leise">Schließen</button>
     </header>
     <div id="hilfe-inhalt" class="hilfe-inhalt"></div>
+  </dialog>
+
+  <dialog id="wecker" aria-labelledby="wecker-titel">
+    <form id="wecker-formular" method="dialog" novalidate>
+      <h2 id="wecker-titel">Mitteilungen</h2>
+      <p class="dialog-text">Die App erinnert dich zu deinen Uhrzeiten an die Aufgaben, solange sie noch offen
+        sind. Bist du fertig, kommt an dem Tag keine mehr.</p>
+      <label class="schalter"><input type="checkbox" id="wecker-an"> Mitteilungen senden</label>
+
+      <fieldset id="wecker-details" class="wecker-details">
+        <legend>Uhrzeiten</legend>
+        <ul id="wecker-uhrzeiten" class="uhrzeiten"></ul>
+        <div class="zeile">
+          <button type="button" id="wecker-hinzufuegen" class="leise">Uhrzeit hinzufügen</button>
+        </div>
+
+        <label for="wecker-kanal">Dein ntfy-Kanal (ein eigener, nicht der von Papa)</label>
+        <input id="wecker-kanal" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="zeile">
+          <button type="button" id="wecker-kanal-neu" class="leise">Erzeugen</button>
+          <button type="button" id="wecker-kanal-kopieren" class="leise">Kopieren</button>
+          <button type="button" id="wecker-test" class="leise">Testmitteilung</button>
+        </div>
+        <p class="eingabe-hilfe">Den Kanal in der ntfy-App auf diesem iPad abonnieren. Geplant werden immer die
+          nächsten drei Tage: Öffnest du die App länger nicht, hören die Mitteilungen auf.</p>
+      </fieldset>
+
+      <p id="wecker-meldung" class="meldung" role="status"></p>
+      <div class="zeile">
+        <button type="submit" id="wecker-speichern">Speichern</button>
+        <button type="button" id="wecker-schliessen" class="leise">Schließen</button>
+      </div>
+    </form>
   </dialog>
 
   <dialog id="einstellungen">

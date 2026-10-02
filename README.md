@@ -16,6 +16,7 @@ App: https://nikwar-schu.github.io/mathe-training/
 | `js/pruefung.js` | Ergebnis-Hashes und Verschlüsselung der Musterlösungen |
 | `js/zeichenblatt.js` | Rechenblatt (Stift zeichnet, Finger scrollt, Werkzeugleiste bleibt oben stehen) |
 | `js/zweifingertipp.js` | Zwei-Finger-Tipp wechselt Stift und Radierer (Pencil-Gesten erreichen Webseiten nicht) |
+| `js/wecker.js`, `js/wecker-dialog.js` | Mitteilungen an Niklas zu wählbaren Uhrzeiten (Glocke oben rechts) |
 | `js/hilfe.js` | Bereinigt den Aufschrieb für den Hilfe-Dialog |
 | `data/heute.json` | Aufgaben des Tages, wird jeden Morgen von einer Claude-Routine erzeugt |
 | `tools/aufgaben-erstellen.mjs` | Macht aus einem Entwurf mit Klartext-Lösungen die `heute.json` |
@@ -64,6 +65,17 @@ Abschlussnachricht.
 
 Die Action braucht das Repository-Secret `NTFY_KANAL`. Von Hand neu planen:
 `gh workflow run erinnerung.yml` (Achtung: plant sie auch dann, wenn der Tag schon erledigt ist).
+
+## Mitteilungen an Niklas (Glocke)
+
+Über die Glocke stellt Niklas ein, ob und zu welchen Uhrzeiten (höchstens vier pro Tag) er an offene
+Aufgaben erinnert wird. Die Mitteilungen gehen an einen **eigenen** ntfy-Kanal, den er in der
+ntfy-App auf dem iPad abonniert; Papas Kanal wird abgelehnt.
+
+Ohne Server plant die App sie bei ntfy im Voraus, so weit ntfy es zulässt (drei Tage). Bei jedem
+Öffnen und beim Abschluss des Tages gleicht sie ab: fehlende planen, überflüssige löschen, die von
+heute löschen, sobald alles erledigt ist. Kennung: `wecker-JJJJ-MM-TT-HHMM`. Wird die App drei Tage
+lang nicht geöffnet, kommen danach keine Mitteilungen mehr.
 
 ## Hinweis zur Sicherheit
 

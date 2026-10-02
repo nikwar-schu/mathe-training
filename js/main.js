@@ -19,6 +19,8 @@ import { hilfeInhalt } from "./hilfe.js";
 import { EingabeFehler } from "./rechner.js";
 import { entschluesseln, pruefeEingaben } from "./pruefung.js";
 import { ladeBlatt, ladeZustand, raeumeBlaetterAuf, speichereBlatt, speichereZustand, tagesstand } from "./speicher.js";
+import { gleicheWeckerAb } from "./wecker.js";
+import { verbindeWeckerDialog, zeigeWeckerZustand } from "./wecker-dialog.js";
 import { Zeichenblatt } from "./zeichenblatt.js";
 
 const DATEN_URL = "data/heute.json";
@@ -36,6 +38,7 @@ let daten = null;
 let tag = null;
 let geheimCache = null;
 let laufenderAbschluss = null;
+let weckerAbgleich = Promise.resolve(null);
 
 const $ = (auswahl, wurzel = document) => wurzel.querySelector(auswahl);
 
@@ -250,6 +253,32 @@ function baueKarte(aufgabe, nummer) {
   return karte;
 }
 
+/* ---------- Mitteilungen an Niklas ---------- */
+
+function heuteErledigt() {
+  const heutigerTag = zustand.tage[heute];
+  return Boolean(heutigerTag) && istTagAbgeschlossen(heutigerTag);
+}
+
+/**
+ * Plant die Mitteilungen bei ntfy neu. Aufrufe laufen nacheinander, damit ein Abgleich nicht mit
+ * einem halb fertigen anderen kollidiert und nichts doppelt geplant wird.
+ */
+function planeWecker() {
+  weckerAbgleich = weckerAbgleich.then(async () => {
+    let fehler;
+    try {
+      fehler = await gleicheWeckerAb(zustand.wecker, { heute, heuteErledigt: heuteErledigt() });
+    } catch (unerwartet) {
+      fehler = unerwartet.message;
+    }
+    speichern();
+    zeigeWeckerZustand(zustand.wecker, fehler);
+    return fehler;
+  });
+  return weckerAbgleich;
+}
+
 /* ---------- Abschluss und Nachricht ---------- */
 
 async function meldeAbschluss() {
@@ -305,6 +334,8 @@ async function abschliessen() {
   aktualisiereKopf();
   aktualisiereOffeneHinweise();
   if (!istTagAbgeschlossen(tag)) return;
+  // Heute ist erledigt: die restlichen Mitteilungen des Tages fallen weg.
+  planeWecker();
   if (tag.gemeldet) {
     const { thema } = await geheimnis();
     $("#thema").textContent = `Heute war dran: ${thema}`;
@@ -381,7 +412,16 @@ async function ladeDaten() {
 
 async function start() {
   verbindeEinstellungen();
+  verbindeWeckerDialog({
+    einstellung: zustand.wecker,
+    papaKanal: () => zustand.kanal,
+    speichern,
+    planen: planeWecker,
+  });
   kanalAusLink();
+  // Unabhängig von den Aufgaben, damit die Mitteilungen der nächsten Tage auch dann geplant werden,
+  // wenn das Laden der Aufgaben scheitert.
+  planeWecker();
 
   try {
     daten = await ladeDaten();

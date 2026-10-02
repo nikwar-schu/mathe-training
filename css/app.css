@@ -164,6 +164,49 @@ code {
   padding: calc(env(safe-area-inset-top) + 20px) var(--abstand) 8px;
 }
 
+.kopf-knoepfe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Glocke: Umriss = aus, gefüllt = an, roter Punkt = letztes Planen fehlgeschlagen */
+.glocke {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+.glocke svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.glocke[data-zustand="an"] svg path:first-child,
+.glocke[data-zustand="fehler"] svg path:first-child {
+  fill: currentColor;
+}
+
+.glocke[data-zustand="fehler"]::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--hintergrund);
+  border-radius: 50%;
+  background: var(--falsch);
+}
+
 .unterzeile {
   margin: 2px 0 0;
   color: var(--text-leise);
@@ -490,6 +533,61 @@ dialog::backdrop {
 dialog form {
   display: grid;
   gap: 10px;
+}
+
+.dialog-text {
+  margin: 0;
+  color: var(--text-leise);
+}
+
+.schalter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.schalter input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--akzent);
+}
+
+.wecker-details {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--rand);
+  border-radius: 8px;
+}
+
+.wecker-details:disabled {
+  opacity: 0.5;
+}
+
+.wecker-details legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.uhrzeiten {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.uhrzeiten li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.uhrzeiten input {
+  width: auto;
+  min-width: 8em;
 }
 
 /* Hilfe: Aufschrieb aus der Zusammenfassung, Klassen wie dort */

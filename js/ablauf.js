@@ -47,6 +47,26 @@ export function mitternachtNach(datum) {
   return (mitternachtUtc - versatzZuUtc(mitternachtUtc)) / 1000;
 }
 
+/**
+ * Unix-Zeit (Sekunden) von `uhrzeit` (HH:MM) deutscher Zeit am Tag `datum`.
+ * Der Versatz wird zweimal bestimmt, weil eine Uhrzeit kurz nach der Zeitumstellung sonst den
+ * Versatz des Vortags bekäme.
+ */
+export function zeitpunktAm(datum, uhrzeit) {
+  const [jahr, monat, tag] = datum.split("-").map(Number);
+  const [stunde, minute] = uhrzeit.split(":").map(Number);
+  const ortszeitAlsUtc = Date.UTC(jahr, monat - 1, tag, stunde, minute);
+  const geschaetzt = ortszeitAlsUtc - versatzZuUtc(ortszeitAlsUtc);
+  return (ortszeitAlsUtc - versatzZuUtc(geschaetzt)) / 1000;
+}
+
+/** Kalenderdatum `tage` Tage nach `datum` (negativ: davor), beides als JJJJ-MM-TT. */
+export function tagNach(datum, tage) {
+  const d = new Date(`${datum}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + tage);
+  return d.toISOString().slice(0, 10);
+}
+
 export function kurzesDatum(datum) {
   const [, monat, tag] = datum.split("-");
   return `${tag}.${monat}.`;
@@ -94,11 +114,7 @@ export function serie(tage, heute) {
     const tag = tage[datum];
     return Boolean(tag) && istTagAbgeschlossen(tag) && tag.aufgaben.some((a) => a.status !== STATUS.uebersprungen);
   };
-  const tagDavor = (datum) => {
-    const d = new Date(`${datum}T12:00:00Z`);
-    d.setUTCDate(d.getUTCDate() - 1);
-    return d.toISOString().slice(0, 10);
-  };
+  const tagDavor = (datum) => tagNach(datum, -1);
 
   let datum = zaehlt(heute) ? heute : tagDavor(heute);
   let anzahl = 0;

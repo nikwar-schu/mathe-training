@@ -15,7 +15,7 @@
     },
     {
       "stufe": "Mittel",
-      "text": "Eine Ebene $E$ hat die Spurpunkte $S_1(3\\\\,|\\\\,0\\\\,|\\\\,0)$, $S_2(0\\\\,|\\\\,{-4}\\\\,|\\\\,0)$ und $S_3(0\\\\,|\\\\,0\\\\,|\\\\,6)$. a) Bestimme eine Koordinatenform $ax + by + cz = d$ mit ganzen Zahlen, $a > 0$ und möglichst kleinem $d > 0$ (teilerfremde Koeffizienten). b) Berechne das Volumen $V$ der dreiseitigen Pyramide mit den Eckpunkten $O(0\\\\,|\\\\,0\\\\,|\\\\,0)$, $S_1$, $S_2$, $S_3$ (Grundfläche: Dreieck $OS_1S_2$, Höhe: $|OS_3|$).",
+      "text": "Eine Ebene $E$ hat die Spurpunkte $S_1(3\\,|\\,0\\,|\\,0)$, $S_2(0\\,|\\,{-4}\\,|\\,0)$ und $S_3(0\\,|\\,0\\,|\\,6)$. a) Bestimme eine Koordinatenform $ax + by + cz = d$ mit ganzen Zahlen, $a > 0$ und möglichst kleinem $d > 0$ (teilerfremde Koeffizienten). b) Berechne das Volumen $V$ der dreiseitigen Pyramide mit den Eckpunkten $O(0\\,|\\,0\\,|\\,0)$, $S_1$, $S_2$, $S_3$ (Grundfläche: Dreieck $OS_1S_2$, Höhe: $|OS_3|$).",
       "felder": [
         "a",
         "b",
@@ -29,8 +29,8 @@
     }
   ],
   "geheim": {
-    "iv": "JQMX3icpmyU6EaSW",
-    "daten": "DsMEx6JUvojKn4iErquDlrynaEsam5/yaQMiHZ5C6k38P2hDvxZhx4Xx93LXv5gwWxy7TesN5PFAedgRNLIGoSfwvPgxKwgoXTxFxdjGru2YXV+ambQuB9mudk1Ll2e88IIswKrUEMqNG75Og/EgMPHf9k5wBQRR658AU547StRXlLviV1HJEBnZ6PgsLLWR9WkfrEmxlKAWSWDOWdqqKNxwtDMoFbPCckN+A3XIYX33iepYJM3SI7lKpLEFA+jr9qsBSq++DwOD57n1uNVlTKKgwftHCkL4rd+93Alqrbw9gCT/Ij52cNhQn975OULE8JJxf0k/9OdxkN6Gh0xox7ncCTBazRBhIse7m0DaEh+HvUiTOw0WQ8dV71eIOlxB9z5oW69oaMpED8W7uSLyNWOJIYUBryDvzATFAHV879/Xj3sQ3X4/h/Tbcf9zrdFHcnZ8WXBm8MREodSXNm1HH17u74Sm5QGoPzjzogS5qCTDTFOKpzs+6jtgJ/mDkka6MSDPjRrOBW5yvoehjfuc2sbiBRhy1U8Q0WMgy+znoY7WfwtL5kFwJz3Ywv70U0RfbosoXIgMR0LD3ulwMW0Oyxtufcka/Br4mGlOLOmwxjOH002QsPLUzo4Pz2K7sodh7tmBgsvUTX8r9rTAmNcLetzEHTPGK5bhPh45ymMhpMT9odqT1Q32OXfTsjIVAgHIcCl4Pz1RQcxqdGrYftkxgGy7DVA4GPm8NyYWcJN3N4DFtSA1zPZjEV7nBeZi2R8oeQovJBaDOUQarxLUEWWLUZWQj84HgYvUFm7W0nlmfMXB669c3uNhs+M3y495vhkaXEyZuwSuvYp0VYJDJUZb5gtVedqyP/wktAqaUlsl/wvLzowedLgLK4UGfuNbiLVbJnpWZummHZv1v3DtsbMfoXVY8+byyDJDuy8leXfkhd9s+M/Xa0vqXjbpRSs0OMik73pAL75BK+7iP9CTRMfgtGn5R/2BLTNIPIpy4f9TyOd+ukJaLDy2Q7YSu63wrrFVV36Q+VGHRm1ecfjcAzAdBMqyTMu9bZu9ESktFabCB+TysCY0Fia2uMhhtoGnTH2I+/1xuJCIEAruj4GDF3iQKSNscKusHFsJeWk92Ok5rLPCt57WMAZOGpzB8GExNa0Jwcl1kdznYMvpvXtz4eEHXuYgUT4OrXmY11U0CF03rnQ6WZFk7hFkL3TVSdyQyqUvv6ZqvEpHeWIuKcVu7UiXzhbMC0t3/d8xHGhKwUyGbWS6AV4NHiiDaK6f+oIqchqy7TrmNIAd0wk4fcQSrOlEfWJo6teBD43SqUyE58TzWASPjkXSrR8GGk14tDIBAJbIg2Q0ymhe7U5cWWbX/etbTFT5yjvMNChQFNMm6upNAWwkxmClmgBc2LXtC7s="
+    "iv": "Q6DZNoK+C66bVudA",
+    "daten": "pzPV/Sn/+nTXg71jhcmOXoJPBG7nEAGrrbZ55qs95IVi1J3ZOa8E8utGKWjBi6NKYyyNTRG4xLJv2WLvNkEfQ8O32O+QcJmAsdwMDGRAJJS/h3F0KuYqw51+rcX5T0ilaLvJ6rQTcXrHUb+99uoNyUohljBMWOH8s6RSn7Y8kE/9cJrRmNXu9bkSeGem0sBLnR87H+gs4DWgWgaK4qWUIuO2n8WcPLCJls/6ZcZc1cKUajYRLIP6+Olefu4zJrECz69RiVGvfwxkFph/9F1Pqwa+eq09z6mvci2Igh93pdZZNTAIShnbJ+fkeCC0XdyWntNvK93KV8ZGMVjaL6FutNYPQsNgzJN6e0FE0ywEtsyzYAgHOTarJxOD6KEJH6KtC3aC1oxQGhvqwXHZ7NbRChvpd4JlFNRLEey+Q2GF+q+FzotTxiHVlflu0C96/UnNqFpKsEphwuHLr6cVvyyU+ppjxbzQLQVupMOENkjFIpHcpAGUniw3QDGp41bSsPmlwclBxaTrTwbSxAgQ/vGq5mPgCISiWoKe9YBdaRbJGi+M2hIvpGzLK5mJUfwHL3COh08O1T3rKSw/X7c3Q7BlhbUuEWj0n+Mf1lmWDjYjJq5dMB3HsuPvnWNXG1eRLhQv7/sQ1JeRPkkqgI39e0xtVdiqDJpI/CnFV7vhDgB3dv0PK+MTEvWUzd2CgGLh0k467LHDdAbT7SIIfEn+qdifunZUS5QqgRsz5PnwiK4gnT71sZ2cu63iyfVP4viMNg7StdPAu5CvLFPuMEocJ8lWAJsE/r0uY2zZjJGabzMmS1XEdmlz0e6tUXx7vCeiMHtFeDcZs6wgLpv1ln4Bfj1XE4ffnvSSWon/pRb4G5GXfwvmCYJI2uVXehCEMvv3xq8H+sHU0EflDoELLTmKelbeeppj+0kw2q4DiVNqmmenjaFYcyQzK2xwf3JyL6PCpGjcr07RHLv2kzN/czX1vNtBo1kEY7+g4Ding9Vw4rbvgmTpHBF/NEATI3V1xvG1nAWR6Yo1snPWHQWj+n4id9w4FH05jiuKifHAiPs2+fuSozKzTbIMTvSfzH338BVSY+qwF1pPajhVFJsGvBJuruPxpsMFc7neA3n0t2o9wn67zV9Y83BHsAGo6VOD/nRUM7atO4x7cuj/uW0gqdzbgTqZKPjefvbZCq1F7pQ0T/IrJiEiw7kybO8Bf+jaEQClDLb2z4WTulobcn/xSKosQUeAOEPMZBxM2AQILAdhjVC9cl/nNWREgSsoj1Z+93PEwI95JjGECPnvHBT6w5QJXqKC13YkZ2imyyTUzQn4g4r4NFBCp+1V5G6sHCpJWm+Da54xZUM="
   },
   "hilfe": {
     "iv": "4QUy1h4yH4vaNfd5",

@@ -479,8 +479,13 @@ main {
   gap: 6px;
 }
 
-.grund-meldung {
+.grund-meldung,
+.ueberspringen-erklaerung {
   margin: 0;
+}
+
+.ueberspringen-erklaerung {
+  font-weight: 600;
 }
 
 .offen-hinweis:not(:empty) {

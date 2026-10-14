@@ -70,8 +70,12 @@
       </form>
 
       <div class="ueberspringen">
-        <button type="button" class="ueberspringen-start leise">Aufgabe überspringen</button>
+        <div class="zeile">
+          <button type="button" class="ueberspringen-start leise" data-neue-aufgabe="nein">Aufgabe überspringen</button>
+          <button type="button" class="ueberspringen-start leise" data-neue-aufgabe="ja">Überspringen und neue Aufgabe</button>
+        </div>
         <form hidden>
+          <p class="ueberspringen-erklaerung"></p>
           <label>Warum überspringst du? Papa bekommt den Grund mitgeteilt.
             <textarea rows="2" maxlength="300" required></textarea>
           </label>

@@ -13,8 +13,15 @@ import {
   serie,
   ueberspringen,
   versuchVerbuchen,
+  wuenschtNeueAufgaben,
 } from "./ablauf.js";
-import { MARKIERUNG_ABGESCHLOSSEN, istGueltigerKanal, loescheErinnerung, sende } from "./benachrichtigung.js";
+import {
+  MARKIERUNG_ABGESCHLOSSEN,
+  istGueltigerKanal,
+  loescheErinnerung,
+  meldeNeueAufgabenWunsch,
+  sende,
+} from "./benachrichtigung.js";
 import { hilfeInhalt } from "./hilfe.js";
 import { EingabeFehler } from "./rechner.js";
 import { entschluesseln, pruefeEingaben } from "./pruefung.js";
@@ -25,6 +32,10 @@ import { Zeichenblatt } from "./zeichenblatt.js";
 
 const DATEN_URL = "data/heute.json";
 const KANAL_HASH_PRAEFIX = "#kanal=";
+const UEBERSPRINGEN_ERKLAERUNG = {
+  wiederholen: "Morgen kommen dieselben Aufgaben noch einmal.",
+  neu: "Morgen bekommst du neue Aufgaben statt dieser.",
+};
 const STATUS_TEXTE = {
   [STATUS.offen]: "",
   [STATUS.richtig]: "richtig",
@@ -194,9 +205,16 @@ async function pruefen(karte, nummer, ereignis) {
 function verbindeUeberspringen(karte, nummer) {
   const bereich = $(".ueberspringen", karte);
   const formular = $("form", bereich);
-  $(".ueberspringen-start", bereich).addEventListener("click", () => {
-    formular.hidden = false;
-    $("textarea", formular).focus();
+  let neueAufgabe = false;
+  bereich.querySelectorAll(".ueberspringen-start").forEach((knopf) => {
+    knopf.addEventListener("click", () => {
+      neueAufgabe = knopf.dataset.neueAufgabe === "ja";
+      $(".ueberspringen-erklaerung", formular).textContent =
+        UEBERSPRINGEN_ERKLAERUNG[neueAufgabe ? "neu" : "wiederholen"];
+      $(".grund-meldung", formular).textContent = "";
+      formular.hidden = false;
+      $("textarea", formular).focus();
+    });
   });
   $(".abbrechen", formular).addEventListener("click", () => {
     formular.hidden = true;
@@ -204,7 +222,7 @@ function verbindeUeberspringen(karte, nummer) {
   formular.addEventListener("submit", async (ereignis) => {
     ereignis.preventDefault();
     try {
-      ueberspringen(tag.aufgaben[nummer], $("textarea", formular).value);
+      ueberspringen(tag.aufgaben[nummer], $("textarea", formular).value, { neueAufgabe });
     } catch (fehler) {
       $(".grund-meldung", formular).textContent = fehler.message;
       return;
@@ -297,8 +315,10 @@ async function meldeAbschluss() {
       thema,
       serieTage: serie(zustand.tage, heute),
     });
-    // Erst die Mitternachts-Erinnerung löschen: Scheitert das, bietet „erneut senden“ beides noch einmal an.
+    // Erst Erinnerung und Status erledigen: Scheitert das, bietet „erneut senden“ alles noch einmal an,
+    // ohne dass Papa die Abschlussnachricht doppelt bekommt.
     await loescheErinnerung(zustand.kanal, daten.datum);
+    if (wuenschtNeueAufgaben(tag)) await meldeNeueAufgabenWunsch(zustand.kanal, daten.datum);
     await sende(zustand.kanal, { ...nachricht, markierungen: [MARKIERUNG_ABGESCHLOSSEN] });
     tag.gemeldet = true;
     speichern();
@@ -432,6 +452,8 @@ async function start() {
 
   if (daten.datum !== heute) {
     zeigeHinweis("Die neuen Aufgaben kommen jeden Morgen gegen 6:30 Uhr. Bis dahin siehst du die letzten.");
+  } else if (daten.wiederholung) {
+    zeigeHinweis("Das sind noch einmal die Aufgaben vom letzten Mal, weil sie offen geblieben oder übersprungen sind.");
   }
 
   raeumeBlaetterAuf(heute);

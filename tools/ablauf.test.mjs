@@ -10,7 +10,9 @@ import {
   serie,
   ueberspringen,
   versuchVerbuchen,
+  wuenschtNeueAufgaben,
 } from "../js/ablauf.js";
+import { enthaeltNeueAufgabenWunsch, neueAufgabenText } from "../js/benachrichtigung.js";
 
 const offen = () => ({ status: STATUS.offen, versuche: 0, grund: "" });
 const tagMit = (...status) => ({ aufgaben: status.map((s) => ({ status: s, versuche: 1, grund: "" })), gemeldet: true });
@@ -78,4 +80,43 @@ test("Erinnerung nennt den Tag und dass nichts erledigt wurde", () => {
   const nachricht = erinnerungNachricht("2026-10-01");
   assert.equal(nachricht.titel, "Niklas, Mathe 01.10.: nicht erledigt");
   assert.equal(nachricht.text, "Niklas hat gestern die Aufgaben nicht erledigt.");
+});
+
+test("Neue Aufgaben nur, wenn alles bearbeitet oder mit „neue Aufgabe“ übersprungen ist", () => {
+  assert.equal(wuenschtNeueAufgaben(tagMit(STATUS.richtig, STATUS.falsch)), true);
+  assert.equal(wuenschtNeueAufgaben(tagMit(STATUS.richtig, STATUS.offen)), false);
+  assert.equal(wuenschtNeueAufgaben(tagMit(STATUS.richtig, STATUS.uebersprungen)), false);
+
+  const tag = { aufgaben: [offen(), offen()] };
+  ueberspringen(tag.aufgaben[0], "Kann ich schon sicher", { neueAufgabe: true });
+  versuchVerbuchen(tag.aufgaben[1], true);
+  assert.equal(wuenschtNeueAufgaben(tag), true);
+});
+
+test("Nachricht an den Vater nennt Wunsch nach neuer Aufgabe und Wiederholung", () => {
+  const nachricht = (tag) =>
+    abschlussNachricht({ datum: "2026-10-01", aufgaben: [{ stufe: "Einstieg" }, { stufe: "Mittel" }], tag, thema: "X", serieTage: 1 }).text;
+
+  const neu = { aufgaben: [offen(), offen()] };
+  ueberspringen(neu.aufgaben[0], "Hatten wir noch nicht", { neueAufgabe: true });
+  versuchVerbuchen(neu.aufgaben[1], true);
+  assert.match(nachricht(neu), /übersprungen, neue Aufgabe gewünscht\. Grund/);
+  assert.doesNotMatch(nachricht(neu), /noch einmal/);
+
+  const wiederholen = { aufgaben: [offen(), offen()] };
+  ueberspringen(wiederholen.aufgaben[0], "Keine Zeit heute");
+  versuchVerbuchen(wiederholen.aufgaben[1], true);
+  assert.match(nachricht(wiederholen), /Die Aufgaben kommen morgen noch einmal\./);
+});
+
+test("Statusabfrage erkennt den Wunsch nur für den richtigen Tag", () => {
+  const zeilen = [
+    JSON.stringify({ event: "open" }),
+    JSON.stringify({ event: "message", message: neueAufgabenText("2026-10-13") }),
+    "kein json",
+    JSON.stringify({ event: "message_delete", message: neueAufgabenText("2026-10-14") }),
+  ].join("\n");
+  assert.equal(enthaeltNeueAufgabenWunsch(zeilen, "2026-10-13"), true);
+  assert.equal(enthaeltNeueAufgabenWunsch(zeilen, "2026-10-14"), false);
+  assert.equal(enthaeltNeueAufgabenWunsch("", "2026-10-13"), false);
 });

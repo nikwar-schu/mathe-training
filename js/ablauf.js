@@ -98,7 +98,11 @@ export function versuchVerbuchen(aufgabe, richtig) {
   return aufgabe.status;
 }
 
-export function ueberspringen(aufgabe, grund) {
+/**
+ * Überspringt eine Aufgabe mit Begründung. Mit `neueAufgabe` wünscht sich Niklas für morgen andere
+ * Aufgaben; ohne kommt derselbe Aufgabensatz am nächsten Tag noch einmal.
+ */
+export function ueberspringen(aufgabe, grund, { neueAufgabe = false } = {}) {
   sicherstellenOffen(aufgabe);
   const bereinigt = grund.trim();
   if (bereinigt.length < MIN_GRUND_LAENGE) {
@@ -106,6 +110,15 @@ export function ueberspringen(aufgabe, grund) {
   }
   aufgabe.status = STATUS.uebersprungen;
   aufgabe.grund = bereinigt;
+  aufgabe.neueAufgabe = neueAufgabe;
+}
+
+/**
+ * Ob am nächsten Tag neue Aufgaben kommen sollen: nur wenn alle Aufgaben bearbeitet oder mit
+ * „neue Aufgabe“ übersprungen sind. Sonst wiederholt die Routine den Satz, statt neue zu erzeugen.
+ */
+export function wuenschtNeueAufgaben(tag) {
+  return istTagAbgeschlossen(tag) && tag.aufgaben.every((a) => a.status !== STATUS.uebersprungen || a.neueAufgabe);
 }
 
 /** Tage in Folge mit abgeschlossenem Training; ein komplett übersprungener Tag unterbricht die Serie. */
@@ -133,7 +146,7 @@ function zeileFuer(aufgabe, nummer, stufe) {
     case STATUS.falsch:
       return `${kopf}: falsch nach ${aufgabe.versuche} Versuchen`;
     case STATUS.uebersprungen:
-      return `${kopf}: übersprungen. Grund: „${aufgabe.grund}“`;
+      return `${kopf}: übersprungen${aufgabe.neueAufgabe ? ", neue Aufgabe gewünscht" : ""}. Grund: „${aufgabe.grund}“`;
     default:
       return `${kopf}: noch offen`;
   }
@@ -153,6 +166,7 @@ export function abschlussNachricht({ datum, aufgaben, tag, thema, serieTage }) {
   const zeilen = tag.aufgaben.map((a, i) => zeileFuer(a, i + 1, aufgaben[i].stufe));
   zeilen.push(`Thema: ${thema}`);
   if (serieTage > 1) zeilen.push(`${serieTage} Tage in Folge geübt`);
+  if (!wuenschtNeueAufgaben(tag)) zeilen.push("Die Aufgaben kommen morgen noch einmal.");
   return {
     titel: `Niklas, Mathe ${kurzesDatum(datum)}: ${richtig} von ${tag.aufgaben.length} richtig`,
     text: zeilen.join("\n"),

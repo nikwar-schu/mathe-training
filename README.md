@@ -22,6 +22,19 @@ App: https://nikwar-schu.github.io/mathe-training/
 | `tools/aufgaben-erstellen.mjs` | Macht aus einem Entwurf mit Klartext-Lösungen die `heute.json` |
 | `tools/abschnitt.mjs` | Schneidet den Abschnitt zum Thema aus der Zusammenfassung (Hilfe) |
 | `tools/erinnerung-planen.mjs`, `.github/workflows/erinnerung.yml` | Plant die Mitternachts-Nachricht „nicht erledigt“ |
+| `tools/aufgaben-wiederholen.mjs` | Entscheidet morgens: neue Aufgaben oder den letzten Satz wiederholen |
+
+## Wiederholen statt neu erzeugen
+
+Neue Aufgaben gibt es nur, wenn am Aufgabentag alle Aufgaben bearbeitet oder mit „Überspringen und
+neue Aufgabe“ abgelehnt wurden. Dann schickt die App beim Abschluss `neu:JJJJ-MM-TT` an den Kanal
+`<Kanal des Vaters>-status` (Kennung `status-JJJJ-MM-TT`), geplant für 12 Uhr am Folgetag. So liegt die
+Meldung bis Mitternacht des Folgetags bei ntfy, auch wenn die Aufgaben früh am Vortag erledigt wurden.
+
+Die Routine ruft morgens zuerst `node tools/aufgaben-wiederholen.mjs --kanal <kanal>` auf. Fehlt die
+Meldung (Aufgaben offen oder normal übersprungen), bekommt `data/heute.json` das heutige Datum und
+`"wiederholung": true`; der Satz bleibt sonst gleich. Ausgabe: `aktuell`, `wiederholt`, `neu` oder
+`unbekannt` (ntfy nicht erreichbar, dann neue Aufgaben).
 
 ## Aufgaben erzeugen
 

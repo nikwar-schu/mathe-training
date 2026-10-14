@@ -4,9 +4,17 @@
  * kann mitlesen und senden. Deshalb ist er lang und zufällig und liegt nur auf den Geräten.
  */
 
-const NTFY_URL = "https://ntfy.sh/";
+import { tagNach, zeitpunktAm } from "./ablauf.js";
+
+export const NTFY_URL = "https://ntfy.sh/";
 const KANAL_MUSTER = /^[A-Za-z0-9_-]{16,64}$/;
 const ERINNERUNG_PRAEFIX = "fehlt-";
+const STATUS_KANAL_SUFFIX = "-status";
+const STATUS_KENNUNG_PRAEFIX = "status-";
+const NEUE_AUFGABEN_PRAEFIX = "neu:";
+// Die Statusmeldung wird erst am Mittag nach dem Aufgabentag zugestellt: Bis dahin liegt sie bei ntfy
+// als geplante Nachricht, danach noch 12 Stunden im Cache. So findet die Routine sie am Morgen sicher.
+const STATUS_ZUSTELLUNG_UHRZEIT = "12:00";
 const ZUFALL_ZEICHEN = "abcdefghijkmnpqrstuvwxyz23456789";
 const ZUFALL_LAENGE = 16;
 export const MARKIERUNG_ABGESCHLOSSEN = "abgeschlossen";
@@ -84,4 +92,47 @@ export async function loesche(kanal, kennung) {
 /** Löscht die für Mitternacht geplante Erinnerung von `datum`. */
 export function loescheErinnerung(kanal, datum) {
   return loesche(kanal, erinnerungsKennung(datum));
+}
+
+/**
+ * Kanal, über den die App der Routine mitteilt, ob es neue Aufgaben geben soll. Niemand abonniert
+ * ihn; er leitet sich vom Kanal des Vaters ab, damit kein zweites Geheimnis nötig ist.
+ */
+export function statusKanal(kanal) {
+  return `${kanal}${STATUS_KANAL_SUFFIX}`;
+}
+
+export function neueAufgabenText(datum) {
+  return `${NEUE_AUFGABEN_PRAEFIX}${datum}`;
+}
+
+/**
+ * Teilt der Routine mit, dass auf die Aufgaben von `datum` neue folgen sollen. Ohne diese Meldung
+ * wiederholt sie den Aufgabensatz. Gleiche Kennung bei erneutem Senden: ntfy ersetzt die Meldung.
+ */
+export async function meldeNeueAufgabenWunsch(kanal, datum, jetzt = Math.floor(Date.now() / 1000)) {
+  const zustellung = zeitpunktAm(tagNach(datum, 1), STATUS_ZUSTELLUNG_UHRZEIT);
+  await sende(statusKanal(kanal), {
+    titel: "Mathe-Training: Status",
+    text: neueAufgabenText(datum),
+    // Liegt der Mittag schon zurück (Aufgaben verspätet erledigt), sofort senden; dann hält ntfy sie 12 Stunden.
+    zeitpunkt: istPlanbar(zustellung, jetzt) ? zustellung : undefined,
+    kennung: `${STATUS_KENNUNG_PRAEFIX}${datum}`,
+  });
+}
+
+/** Ob die Antwort einer ntfy-Abfrage (eine JSON-Nachricht pro Zeile) den Wunsch nach neuen Aufgaben für `datum` enthält. */
+export function enthaeltNeueAufgabenWunsch(antwortText, datum) {
+  const gesucht = neueAufgabenText(datum);
+  return antwortText
+    .split("\n")
+    .filter((zeile) => zeile.trim() !== "")
+    .some((zeile) => {
+      try {
+        const nachricht = JSON.parse(zeile);
+        return nachricht.event === "message" && nachricht.message === gesucht;
+      } catch {
+        return false;
+      }
+    });
 }

@@ -1,37 +1,36 @@
 {
-  "datum": "2026-11-03",
+  "datum": "2026-11-04",
   "aufgaben": [
     {
       "stufe": "Einstieg",
-      "text": "Gegeben sind die Vektoren $\\vec a = (2\\,|\\,-1\\,|\\,3)^T$, $\\vec b_t = (4\\,|\\,t\\,|\\,-2)^T$ und $\\vec c = (1\\,|\\,5\\,|\\,-2)^T$. Bestimme $t$ so, dass $\\vec a$ und $\\vec b_t$ orthogonal sind, und berechne das Skalarprodukt $\\vec a \\cdot \\vec c$.",
+      "text": "Gegeben ist $f(x) = 3e^{2x} - 5x$. Bestimme $f'(0)$ und $f'(\\ln 2)$.",
       "felder": [
-        "t",
-        "\\vec a \\cdot \\vec c"
+        "f'(0)",
+        "f'(\\ln 2)"
       ],
       "ungeordnet": false,
-      "salz": "430d46d2826fa39edc00f973ba1fc8f8",
-      "hash": "0adbd0fef7c914bb344338c6045a84495ca6f4aa03526f3fd2db9294921362f7"
+      "salz": "315bdd0f098abdd5d1e2213b37948ea8",
+      "hash": "5fdd83ff454bed042cfc0ad0f3f5d219c021f5dcdd4ccc99a188ce23bc15df3a"
     },
     {
       "stufe": "Mittel",
-      "text": "Gegeben sind die Punkte $A(1\\,|\\,2\\,|\\,{-1})$, $B(3\\,|\\,0\\,|\\,0)$ und $C(2\\,|\\,4\\,|\\,z)$. Das Dreieck $ABC$ hat bei $A$ einen rechten Winkel. Bestimme $z$ und den Flächeninhalt $A_\\Delta$ des Dreiecks. Die Gerade $h$ geht durch $C$ und hat den Richtungsvektor $(2\\,|\\,1\\,|\\,u)^T$. Für welches $u$ ist $h$ orthogonal zur Geraden durch $A$ und $B$?",
+      "text": "Die Konzentration eines Medikaments im Blut (in mg/l) wird $t$ Stunden nach der Einnahme beschrieben durch $c(t) = 8t \\cdot e^{-0{,}25t}$ mit $t \\ge 0$. Bestimme die Änderungsrate zum Zeitpunkt der Einnahme $c'(0)$, den Zeitpunkt $t_{max}$ der höchsten Konzentration und diese höchste Konzentration $c_{max}$ (in mg/l, gerundet auf zwei Nachkommastellen oder exakt).",
       "felder": [
-        "z",
-        "A_\\Delta",
-        "u"
+        "c'(0)",
+        "t_{max}",
+        "c_{max}"
       ],
       "ungeordnet": false,
-      "salz": "bdcef20258240568fb5ab1ac73e951fa",
-      "hash": "3fa53c7d23cc781cded2d42693adae151109570258aee149c455a5fdc8fb99b9"
+      "salz": "0dbdf89d57dbb4ed5c5d191b59976278",
+      "hash": "5495a55c8accac03036adb6f368ac870767f481931d89abc9e62c7dd017406d9"
     }
   ],
   "geheim": {
-    "iv": "cYSIqCtdNi1JDd7B",
-    "daten": "Jzv8ezRXQDYv/WWWnMwli/wD4Hk/0wqGjYM1+Tj+F+30PmqeHJl8D+Dj84rAwhyIEvru8mSIOcdpwWOzB/OBW0/rzVZCRmezswfHChrVOEiwWxP9zbx8bueDdi69yzRJD+UdIAnwnM68Yie+Va9KFjEWbPnjOMWSsgMyglCxnfYyKF0zmndQku0Ffh6+bncPsODIpPAg+zgBYmEKBbtGbX2dRFPaRqinN03nWITVPpXMI1YqLMpSmnd0wkePkaK/sP/40cJiCid/uLuLgFwMGc5PpSf8urY+va8fDxQil/ygx7lQk9qgxWLVecUute0N1u/Y3kvuNM9G7oj6bDkaYrLe87kEVYkWk4XO2VT0eb5jn2MjowwtSUX4HYTqfEmSjRA6GOaWR9QMIk2KPOKeYtLlKh5oeA6zSFawUioxwcDZhco89KcQApm5iH1qw1ZlvpEqnKSBbcBmql+VKiIwTRp3ljbeGWHhiCiR51ZRmEZTTmiSy1Vpv2Ep2Fywn9+GpMNIB8wg+di+57m/GmfZLVTw2YSIyZCUgVTnHaw7dMQvte5I7sEQhhrgJHNnG3MQzqDu6u02ENbFG+4iEBL9kW2kTN3FiVXAhOYz2hHU5hMjKRlyXuPCzBWkMC4IOrK+g2wC9zeIVh44rXr/VTakP0d5Uq2R6V1zlh3LbVIYLFV/F0n8LHpURpioV3NN8naW0NSSNU+urb/O1aEScqcUnc9dD++xlS59IPm8mFLwA/WbkeG7TBJ6XmAumGvFTNIg59zTdQa3iBiI1PyeS5U3pugRw+PsDZzjiSIZg/j/otpRx9rHvejB1YrQL0fnk4+0JruL5D1oViQX2bMSJk+0Fg7jJjYbL34MfkR5qGC7sN8q6X9iiGI0pQPnzFaFuIvWxePNzb3DAmzqiDaT/S7HWwElJtqt0Iez/ydID3iciJZ0/H78GpJLhfPfJrXN9EJu4VBoed3T/R4+yV7ua6dTsVfgFWZHjCXhN8Pv/t4+1txgyVPGlKF/CT1L0KIUtWM0cxm4sBDqiK+o0cpCq7qbo1f6qVf/ZUfOmGU3LQu1qcOokOo5FFIqZ34OgGu9p+H50pkwG/wOjXKtwb8DAXgVCfIOGo3wruBFJktLkLeleQj5gDDNUQe1nRYFwTpI7lUo4sbzWL5dz6Jl9B/ywy+2YZcF8piv8kt3n0T/BnqDTXgdMhfOKFm7MM3NWBZAx9EYv0ZKFBnCONNeCF/Je2m0vpkq9fLZVSowqjN1PD20+ELbXg7y/7YEyy9ohYe9q1X6u9ee5AWJXKYgNO4rASY69xIADWYTU+N9N5ZITDCDz5yqh+ThQF/cWKBQGLl3RbbOdvtS1AWln1TSBxm9WchR6YMxisZQPUacZkp4lDnFgClCIMM="
+    "iv": "DoXnB1ZU7K1zEFGm",
+    "daten": "ivEdmnt6L/HJfoiWqBXnc3GgKS3hD6tvwOGTWYnV+806xtJr4iKDK5XIq8NZvRQrzbb+1XXxApAfFblN0NM5V1r9ir2b6wlumZo/sLwFnCBGLK1z6XgAAlQrcMHY7bsVRWFU8qIO5S03ESuI9JG6DcwUazzO5n9WwpSk4CiPPUgFdx7iwXRVHRqCDQpYqUUT07/eMOZlJoUcgnc+iAlV23Cihp/OZ5DI0dtVJLLzM/Sv5h2xw2RUxnuRsb/ngy2dfks19b+Rh8v7iwWqYIjwBCblUPQ4qxBLgVH9TH5NiQexXTALkQYFFek8BAQzRmG2YvO3tVNMk91vAhU8ywwsxdweREhLb+kMct3JUdEafdqUy97mWk6hTwtjAcrpHaPSU9ucBDfvQpelC6YOwDAtALhrkiQCNAzsvByUhaRHhOCRxAVyL9dg7a3Nt1PwWPzPLqXM8oL56082rKQ6SSiZj/seLoBHEQXH+Rl30jxbuOryPQ8L8Tyc+1fzl4UnPvuTg+SvTom5FZ4XgQ0k1Apnw7gWIUdH23yGiXZrU81vuF6FmcelKfpbT4ZdF6UUxu9320kSCPWt5DuHexAQP4KLwxbauOMT4xyaPjBYlMAZRIC1AFx9VLunNu6PTcdrtGOqSndo0faOjVJXDOOah8lg/8T8XfQ+ItMYQJ6VOullzqktYHHmGBvdaJmu70GsIgGsSaw/3SH1CV9CE+6TzZ3Jll0PwEB315FfrSkDQGol0dacRU/UBnhltB26h+jr4m5jVrUyO3SdzAs87f0m8lVt25t6U9TDxAlFyPYfa7qxvSc88Yb9V4dAtv7VyrjCObk3QNSXKdpBgadR0zzKRuDA2PYeUMcgKQUjL8y5TsQK1XLayaMrfSKDvfpVfLolSuMxdfiVGjw3Jh0FuQHpyiUitOz+jlBeuyLtKXHzze+mXc5NFLS9JuAsnqAkF+PNAojvASLu6QYFZP6bK+L9lXXkiGEjghlMGCxU2sEDcAbfS/DlGMjYI72z9PG5Qy9EkBH9DuRN0a347BAROs7z7217VsBt6bqqS2x4x2HO8/SHm8Czim1w5A8NMpJDzht3wujWcPsFyhUwfnWaXWfbN/tAIA=="
   },
   "hilfe": {
-    "iv": "FYYe+nStKl8fp0/r",
-    "daten": "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"
-  },
-  "wiederholung": true
+    "iv": "xU1qv0pQGn3q/7Jf",
+    "daten": "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"
+  }
 }
